@@ -314,13 +314,13 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 void CreateControls(HWND hWnd)
 {
     hWndStaticInfo = CreateWindowExW(0, L"STATIC",
-        L"HTTP服务器已启动: http://localhost:8000",
+        L"HTTP Server started: http://localhost:8000",
         WS_VISIBLE | WS_CHILD | SS_CENTER,
         10, 10, 400, 20,
         hWnd, (HMENU)IDC_STATIC_INFO, hInst, NULL);
 
     HWND hStaticExe = CreateWindowExW(0, L"STATIC",
-        L"程序路径:",
+        L"Program:",
         WS_VISIBLE | WS_CHILD | SS_RIGHT,
         10, 40, 70, 23,
         hWnd, (HMENU)IDC_STATIC_EXE, hInst, NULL);
@@ -332,13 +332,13 @@ void CreateControls(HWND hWnd)
         hWnd, (HMENU)IDC_EDIT_EXE, hInst, NULL);
 
     hWndBtnAdd = CreateWindowExW(0, L"BUTTON",
-        L"添加",
+        L"Add",
         WS_VISIBLE | WS_CHILD | BS_DEFPUSHBUTTON,
         595, 40, 70, 23,
         hWnd, (HMENU)IDC_BTN_ADD, hInst, NULL);
 
     HWND hStaticArgs = CreateWindowExW(0, L"STATIC",
-        L"启动参数:",
+        L"Arguments:",
         WS_VISIBLE | WS_CHILD | SS_RIGHT,
         10, 70, 70, 23,
         hWnd, (HMENU)IDC_STATIC_ARGS, hInst, NULL);
@@ -357,9 +357,9 @@ void CreateControls(HWND hWnd)
 
     ListView_SetExtendedListViewStyle(hWndList, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
-    WCHAR szCol1[] = L"程序路径";
-    WCHAR szCol2[] = L"启动参数";
-    WCHAR szCol3[] = L"运行状态";
+    WCHAR szCol1[] = L"Program Path";
+    WCHAR szCol2[] = L"Arguments";
+    WCHAR szCol3[] = L"Status";
 
     LVCOLUMN lvColumn;
     lvColumn.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
@@ -422,7 +422,7 @@ void RefreshProcessList()
         ListView_InsertItem(hWndList, &lvItem);
 
         ListView_SetItemText(hWndList, index, 1, (LPWSTR)proc->arguments.c_str());
-        ListView_SetItemText(hWndList, index, 2, (LPWSTR)(isRunning ? L"运行中" : L"已停止"));
+        ListView_SetItemText(hWndList, index, 2, (LPWSTR)(isRunning ? L"Running" : L"Stopped"));
 
         index++;
     }
@@ -444,10 +444,10 @@ void ShowContextMenu(HWND hWnd, int x, int y)
         }
     }
 
-    AppendMenuW(hMenu, MF_STRING | (isRunning ? MF_GRAYED : 0), IDM_START_PROCESS, L"启动");
-    AppendMenuW(hMenu, MF_STRING | (!isRunning ? MF_GRAYED : 0), IDM_STOP_PROCESS, L"停止");
+    AppendMenuW(hMenu, MF_STRING | (isRunning ? MF_GRAYED : 0), IDM_START_PROCESS, L"Start");
+    AppendMenuW(hMenu, MF_STRING | (!isRunning ? MF_GRAYED : 0), IDM_STOP_PROCESS, L"Stop");
     AppendMenuW(hMenu, MF_SEPARATOR, 0, NULL);
-    AppendMenuW(hMenu, MF_STRING, IDM_REMOVE_PROCESS, L"删除");
+    AppendMenuW(hMenu, MF_STRING, IDM_REMOVE_PROCESS, L"Remove");
 
     TrackPopupMenu(hMenu, TPM_LEFTALIGN | TPM_TOPALIGN | TPM_RIGHTBUTTON,
         x, y, 0, hWnd, NULL);

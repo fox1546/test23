@@ -181,35 +181,9 @@ std::string HttpServer::GenerateProcessListHtml()
     ProcessManager& pm = ProcessManager::GetInstance();
     const auto& processes = pm.GetAllProcesses();
 
-    const char* title = "进程远程控制";
-    const char* col_id = "ID";
-    const char* col_path = "程序路径";
-    const char* col_args = "启动参数";
-    const char* col_status = "运行状态";
-    const char* col_action = "操作";
-    const char* status_running = "运行中";
-    const char* status_stopped = "已停止";
-    const char* btn_start = "启动";
-    const char* btn_stop = "停止";
-    const char* btn_refresh = "刷新";
-    const char* btn_add = "添加";
-    const char* btn_remove = "删除";
-    const char* add_title = "添加新程序";
-    const char* label_path = "程序路径:";
-    const char* label_args = "启动参数:";
-    const char* placeholder_path = "如: C:\\\\Windows\\\\notepad.exe";
-    const char* placeholder_args = "可选参数";
-    const char* empty_msg = "暂无程序，请添加程序";
-    const char* alert_start_fail = "启动失败";
-    const char* alert_stop_fail = "停止失败";
-    const char* alert_remove_fail = "删除失败";
-    const char* alert_add_fail = "添加失败";
-    const char* confirm_remove = "确定要删除此进程吗?";
-    const char* prompt_path = "请输入程序路径";
-
     std::ostringstream html;
     html << "<!DOCTYPE html>";
-    html << "<html><head><meta charset=\"UTF-8\"><title>" << title << "</title>";
+    html << "<html><head><meta charset=\"UTF-8\"><title>Process Remote Control</title>";
     html << "<style>";
     html << "body { font-family: 'Microsoft YaHei', Arial, sans-serif; margin: 20px; background-color: #f5f5f5; }";
     html << "h1 { color: #333; text-align: center; }";
@@ -233,55 +207,55 @@ std::string HttpServer::GenerateProcessListHtml()
     html << ".add-form input { padding: 8px; margin: 5px; border: 1px solid #ddd; border-radius: 4px; }";
     html << ".add-form .btn-add { background-color: #2196F3; color: white; }";
     html << ".add-form .btn-add:hover { background-color: #1976D2; }";
-    html << ".add-form label { display: inline-block; width: 80px; }";
+    html << ".add-form label { display: inline-block; width: 100px; }";
     html << "</style>";
     html << "<script>";
     html << "function refreshPage() { location.reload(); }";
     html << "function startProcess(id) {";
     html << "  fetch('/api/start?id=' + id).then(function(response) { return response.json(); })";
-    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('" << alert_start_fail << ": ' + data.message); });";
+    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('Start failed: ' + data.message); });";
     html << "}";
     html << "function stopProcess(id) {";
     html << "  fetch('/api/stop?id=' + id).then(function(response) { return response.json(); })";
-    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('" << alert_stop_fail << ": ' + data.message); });";
+    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('Stop failed: ' + data.message); });";
     html << "}";
     html << "function removeProcess(id) {";
-    html << "  if(confirm('" << confirm_remove << "')) {";
+    html << "  if(confirm('Are you sure you want to remove this process?')) {";
     html << "    fetch('/api/remove?id=' + id).then(function(response) { return response.json(); })";
-    html << "    .then(function(data) { if(data.success) refreshPage(); else alert('" << alert_remove_fail << ": ' + data.message); });";
+    html << "    .then(function(data) { if(data.success) refreshPage(); else alert('Remove failed: ' + data.message); });";
     html << "  }";
     html << "}";
     html << "function addProcess() {";
     html << "  var exe = document.getElementById('exePath').value;";
     html << "  var args = document.getElementById('arguments').value;";
-    html << "  if(!exe) { alert('" << prompt_path << "'); return; }";
+    html << "  if(!exe) { alert('Please enter the program path'); return; }";
     html << "  var formData = new FormData();";
     html << "  formData.append('exe', exe);";
     html << "  formData.append('args', args);";
     html << "  fetch('/api/add', { method: 'POST', body: formData })";
     html << "  .then(function(response) { return response.json(); })";
-    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('" << alert_add_fail << ": ' + data.message); });";
+    html << "  .then(function(data) { if(data.success) refreshPage(); else alert('Add failed: ' + data.message); });";
     html << "}";
     html << "</script>";
     html << "</head><body>";
     html << "<div class='container'>";
-    html << "<h1>" << title << "</h1>";
-    html << "<button class='btn btn-refresh' onclick='refreshPage()'>" << btn_refresh << "</button>";
+    html << "<h1>Process Remote Control</h1>";
+    html << "<button class='btn btn-refresh' onclick='refreshPage()'>Refresh</button>";
     html << "<div style='clear:both;'></div>";
 
     html << "<div class='add-form'>";
-    html << "<h3>" << add_title << "</h3>";
-    html << "<div><label>" << label_path << "</label><input type='text' id='exePath' size='60' placeholder='" << placeholder_path << "'></div>";
-    html << "<div><label>" << label_args << "</label><input type='text' id='arguments' size='60' placeholder='" << placeholder_args << "'></div>";
-    html << "<div><label>&nbsp;</label><button class='btn btn-add' onclick='addProcess()'>" << btn_add << "</button></div>";
+    html << "<h3>Add New Program</h3>";
+    html << "<div><label>Program Path:</label><input type='text' id='exePath' size='60' placeholder='e.g. C:\\\\Windows\\\\notepad.exe'></div>";
+    html << "<div><label>Arguments:</label><input type='text' id='arguments' size='60' placeholder='optional arguments'></div>";
+    html << "<div><label>&nbsp;</label><button class='btn btn-add' onclick='addProcess()'>Add</button></div>";
     html << "</div>";
 
     html << "<table>";
-    html << "<tr><th>" << col_id << "</th><th>" << col_path << "</th><th>" << col_args << "</th><th>" << col_status << "</th><th>" << col_action << "</th></tr>";
+    html << "<tr><th>ID</th><th>Program Path</th><th>Arguments</th><th>Status</th><th>Action</th></tr>";
 
     if (processes.empty())
     {
-        html << "<tr><td colspan='5' style='text-align:center;'>" << empty_msg << "</td></tr>";
+        html << "<tr><td colspan='5' style='text-align:center;'>No programs yet, please add one</td></tr>";
     }
     else
     {
@@ -293,19 +267,19 @@ std::string HttpServer::GenerateProcessListHtml()
             html << "<td>" << EscapeHtml(WStringToString(proc->exePath)) << "</td>";
             html << "<td>" << EscapeHtml(WStringToString(proc->arguments)) << "</td>";
             html << "<td class='" << (isRunning ? "status-running" : "status-stopped") << "'>"
-                << (isRunning ? status_running : status_stopped) << "</td>";
+                << (isRunning ? "Running" : "Stopped") << "</td>";
             html << "<td>";
             if (isRunning)
             {
-                html << "<button class='btn btn-start' disabled>" << btn_start << "</button>";
-                html << "<button class='btn btn-stop' onclick='stopProcess(" << proc->id << ")'>" << btn_stop << "</button>";
+                html << "<button class='btn btn-start' disabled>Start</button>";
+                html << "<button class='btn btn-stop' onclick='stopProcess(" << proc->id << ")'>Stop</button>";
             }
             else
             {
-                html << "<button class='btn btn-start' onclick='startProcess(" << proc->id << ")'>" << btn_start << "</button>";
-                html << "<button class='btn btn-stop' disabled>" << btn_stop << "</button>";
+                html << "<button class='btn btn-start' onclick='startProcess(" << proc->id << ")'>Start</button>";
+                html << "<button class='btn btn-stop' disabled>Stop</button>";
             }
-            html << "<button class='btn' style='background-color: #ff9800; color: white;' onclick='removeProcess(" << proc->id << ")'>" << btn_remove << "</button>";
+            html << "<button class='btn' style='background-color: #ff9800; color: white;' onclick='removeProcess(" << proc->id << ")'>Remove</button>";
             html << "</td>";
             html << "</tr>";
         }
@@ -322,18 +296,6 @@ std::string HttpServer::HandleApiRequest(const std::string& request)
 {
     std::unordered_map<std::string, std::string> params;
     std::string response;
-
-    const char* msg_start_ok = "启动成功";
-    const char* msg_start_fail = "启动失败";
-    const char* msg_stop_ok = "停止成功";
-    const char* msg_stop_fail = "停止失败";
-    const char* msg_remove_ok = "删除成功";
-    const char* msg_remove_fail = "删除失败";
-    const char* msg_add_ok = "添加成功";
-    const char* msg_add_fail = "添加失败";
-    const char* msg_list_ok = "获取列表成功";
-    const char* msg_missing_id = "缺少参数: id";
-    const char* msg_missing_path = "缺少程序路径";
 
     size_t getPos = request.find("GET /api/");
     size_t postPos = request.find("POST /api/");
@@ -390,11 +352,11 @@ std::string HttpServer::HandleApiRequest(const std::string& request)
             {
                 int id = std::stoi(params["id"]);
                 success = pm.StartProcess(id);
-                message = success ? msg_start_ok : msg_start_fail;
+                message = success ? "Started" : "Failed to start";
             }
             else
             {
-                message = msg_missing_id;
+                message = "Missing parameter: id";
             }
         }
         else if (action == "stop")
@@ -403,11 +365,11 @@ std::string HttpServer::HandleApiRequest(const std::string& request)
             {
                 int id = std::stoi(params["id"]);
                 success = pm.StopProcess(id);
-                message = success ? msg_stop_ok : msg_stop_fail;
+                message = success ? "Stopped" : "Failed to stop";
             }
             else
             {
-                message = msg_missing_id;
+                message = "Missing parameter: id";
             }
         }
         else if (action == "remove")
@@ -416,17 +378,17 @@ std::string HttpServer::HandleApiRequest(const std::string& request)
             {
                 int id = std::stoi(params["id"]);
                 success = pm.RemoveProcess(id);
-                message = success ? msg_remove_ok : msg_remove_fail;
+                message = success ? "Removed" : "Failed to remove";
             }
             else
             {
-                message = msg_missing_id;
+                message = "Missing parameter: id";
             }
         }
         else if (action == "list")
         {
             success = true;
-            message = msg_list_ok;
+            message = "OK";
         }
 
         std::ostringstream json;
@@ -491,11 +453,11 @@ std::string HttpServer::HandleApiRequest(const std::string& request)
             {
                 int id = pm.AddProcess(exePath, arguments);
                 success = id > 0;
-                message = success ? msg_add_ok : msg_add_fail;
+                message = success ? "Added" : "Failed to add";
             }
             else
             {
-                message = msg_missing_path;
+                message = "Missing program path";
             }
         }
 
