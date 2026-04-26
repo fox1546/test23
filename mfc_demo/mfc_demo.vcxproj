@@ -155,9 +155,13 @@
     <ClInclude Include="mfc_demo.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
+    <ClInclude Include="ProcessManager.h" />
+    <ClInclude Include="HttpServer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="mfc_demo.cpp" />
+    <ClCompile Include="ProcessManager.cpp" />
+    <ClCompile Include="HttpServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="mfc_demo.rc" />

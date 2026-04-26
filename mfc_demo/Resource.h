@@ -13,6 +13,18 @@
 #define IDI_SMALL				108
 #define IDC_MFCDEMO			109
 #define IDC_MYICON				2
+
+#define IDC_PROCESS_LIST       1000
+#define IDC_EDIT_EXE           1001
+#define IDC_EDIT_ARGS          1002
+#define IDC_BTN_ADD            1003
+#define IDC_STATIC_EXE         1004
+#define IDC_STATIC_ARGS        1005
+#define IDC_STATIC_INFO        1006
+
+#define IDM_START_PROCESS      32771
+#define IDM_STOP_PROCESS       32772
+#define IDM_REMOVE_PROCESS     32773
 #ifndef IDC_STATIC
 #define IDC_STATIC				-1
 #endif
