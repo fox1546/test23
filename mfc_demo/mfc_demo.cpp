@@ -357,20 +357,24 @@ void CreateControls(HWND hWnd)
 
     ListView_SetExtendedListViewStyle(hWndList, LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
 
+    WCHAR szCol1[] = L"程序路径";
+    WCHAR szCol2[] = L"启动参数";
+    WCHAR szCol3[] = L"运行状态";
+
     LVCOLUMN lvColumn;
     lvColumn.mask = LVCF_FMT | LVCF_WIDTH | LVCF_TEXT;
     lvColumn.fmt = LVCFMT_LEFT;
 
     lvColumn.cx = 250;
-    lvColumn.pszText = L"程序路径";
+    lvColumn.pszText = szCol1;
     ListView_InsertColumn(hWndList, 0, &lvColumn);
 
     lvColumn.cx = 150;
-    lvColumn.pszText = L"启动参数";
+    lvColumn.pszText = szCol2;
     ListView_InsertColumn(hWndList, 1, &lvColumn);
 
     lvColumn.cx = 80;
-    lvColumn.pszText = L"运行状态";
+    lvColumn.pszText = szCol3;
     ListView_InsertColumn(hWndList, 2, &lvColumn);
 
     ResizeControls(hWnd);
